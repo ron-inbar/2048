@@ -1,4 +1,4 @@
-function KeyboardInputManager() {
+function GravityInputManager() {
   this.events = {};
 
   if (window.navigator.msPointerEnabled) {
@@ -11,18 +11,18 @@ function KeyboardInputManager() {
     this.eventTouchmove     = "touchmove";
     this.eventTouchend      = "touchend";
   }
-
+  
   this.listen();
 }
 
-KeyboardInputManager.prototype.on = function (event, callback) {
+GravityInputManager.prototype.on = function (event, callback) {
   if (!this.events[event]) {
     this.events[event] = [];
   }
   this.events[event].push(callback);
 };
 
-KeyboardInputManager.prototype.emit = function (event, data) {
+GravityInputManager.prototype.emit = function (event, data) {
   var callbacks = this.events[event];
   if (callbacks) {
     callbacks.forEach(function (callback) {
@@ -31,7 +31,7 @@ KeyboardInputManager.prototype.emit = function (event, data) {
   }
 };
 
-KeyboardInputManager.prototype.listen = function () {
+GravityInputManager.prototype.listen = function () {
   var self = this;
 
   var map = {
@@ -117,14 +117,19 @@ KeyboardInputManager.prototype.listen = function () {
       self.emit("move", absDx > absDy ? (dx > 0 ? 1 : 3) : (dy > 0 ? 2 : 0));
     }
   });
+  
+  // Listen to accelerator events
+  gameContainer.addEventListener("devicemotion", function (event) {
+      console.log("devicemotion");
+  });
 };
 
-KeyboardInputManager.prototype.restart = function (event) {
+GravityInputManager.prototype.restart = function (event) {
   event.preventDefault();
   this.emit("restart");
 };
 
-KeyboardInputManager.prototype.keepPlaying = function (event) {
+GravityInputManager.prototype.keepPlaying = function (event) {
   event.preventDefault();
   this.emit("keepPlaying");
 };
