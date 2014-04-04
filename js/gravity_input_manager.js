@@ -15,21 +15,7 @@ function GravityInputManager() {
   this.listen();
 }
 
-GravityInputManager.prototype.on = function (event, callback) {
-  if (!this.events[event]) {
-    this.events[event] = [];
-  }
-  this.events[event].push(callback);
-};
-
-GravityInputManager.prototype.emit = function (event, data) {
-  var callbacks = this.events[event];
-  if (callbacks) {
-    callbacks.forEach(function (callback) {
-      callback(data);
-    });
-  }
-};
+GravityInputManager.prototype = new InputManager();
 
 GravityInputManager.prototype.listen = function () {
   var self = this;
@@ -119,17 +105,8 @@ GravityInputManager.prototype.listen = function () {
   });
   
   // Listen to accelerator events
-  gameContainer.addEventListener("devicemotion", function (event) {
-      console.log("devicemotion");
+  window.addEventListener("devicemotion", function (event) {
+//      console.log("devicemotion");
   });
 };
 
-GravityInputManager.prototype.restart = function (event) {
-  event.preventDefault();
-  this.emit("restart");
-};
-
-GravityInputManager.prototype.keepPlaying = function (event) {
-  event.preventDefault();
-  this.emit("keepPlaying");
-};
